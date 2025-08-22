@@ -1,0 +1,59 @@
+
+.ti-card{ display:flex; justify-content:space-between; gap:14px;
+  height: 60px; 
+  background:#0c1220; border:1px solid rgba(255,255,255,.08);
+  border-radius:16px; padding:16px 18px; color:#e6ecff;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.02);
+}
+.ti-left{ display:flex; gap:12px; }
+.ti-title{ margin:0; font-size:18px; font-weight:600; }
+.ti-desc{ margin:6px 0 0; color:#a7b2c8; }
+
+.ti-card.is-done .ti-title{ color:#b7f0cf; }
+.ti-card.is-done { opacity: 0.7;}
+
+.ti-chk{ width:20px; height:20px; display:inline-flex; }
+.ti-chk .box{
+  width:20px; height:20px; border-radius:6px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+}
+.ti-chk .box::after{
+  content:""; display:block; margin:4px;
+  width:10px; height:10px; border-radius:0px;
+  transition:opacity .15s, transform .15s;
+}
+.ti-chk.on .box{
+  background:rgba(45,227,141,.12); border-color:rgba(45,227,141,.55);
+  box-shadow:0 0 0 3px rgba(45,227,141,.28) inset;
+}
+.ti-chk.on .box::after{ opacity:0.6; transform:scale(1); }
+
+.ti-actions{ display:flex; gap:12px; }
+.chip{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:100%; padding:0 14px; border-radius:12px; font-weight:600;
+  color:#e6ecff; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.08);
+}
+.chip-ok{ border-color:rgba(45,227,141,.45); }
+.chip-ok:hover{ box-shadow:0 0 0 3px rgba(45,227,141,.35); }
+.chip-danger{ border-color:rgba(255,77,109,.45); }
+.chip-danger:hover{ box-shadow:0 0 0 3px rgba(157, 47, 47, 0.53); }
+
+.chip.disabled{ opacity:.6; cursor:default; pointer-events:none; border-style:dashed; }
+
+.ti-ce{
+  outline: none;
+}
+
+.ti-ce.is-editing{
+  box-shadow: 0 0 0 2px rgba(91,179,255,.35);
+  background: rgba(255,255,255,.04);
+}
+
+.ti-title:not([contenteditable="true"]),
+.ti-desc:not([contenteditable="true"]){
+  cursor: text;
+}

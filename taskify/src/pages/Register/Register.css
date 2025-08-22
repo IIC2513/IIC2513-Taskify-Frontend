@@ -1,0 +1,95 @@
+:root{
+  --surface-1:#2b3444;
+  --surface-2:#0c1220;
+  --text:#e6ecff;
+  --text-dim:#a7b2c8;
+  --border:rgba(255,255,255,.08);
+  --ring:rgba(91,179,255,.35);
+}
+
+.register-wrap{
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: auto 16px;
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(91,179,255,.06), transparent),
+              radial-gradient(1200px 600px at 110% 110%, rgba(91,179,255,.05), transparent);
+}
+
+.register-card{
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface-1);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.28);
+}
+
+.register-title{
+  margin: 0 0 14px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.register-form{ display: grid; gap: 14px; }
+
+.fld{ display: grid; gap: 6px; }
+.fld-label{ font-weight: 700; color: var(--text); }
+
+.fld-input{
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, transform .1s;
+}
+.fld-input::placeholder{ color: var(--text-dim); }
+.fld-input:focus{
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--ring);
+  transform: translateY(-1px);
+}
+
+.register-btn{
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .2s, border-color .2s;
+}
+.register-btn:hover{
+  transform: translateY(-1px);
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.page-back{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  margin-bottom: 8px;
+}
+
+.back-link{
+  appearance:none;
+  background:none;
+  border:none;
+  padding:0;
+  cursor:pointer;
+  color: var(--text-dim, #a7b2c8);
+  font-weight: 700;
+  text-decoration: none;
+}
+.back-link:hover{
+  color: var(--text, #e6ecff);
+  text-decoration: underline;
+}
+
