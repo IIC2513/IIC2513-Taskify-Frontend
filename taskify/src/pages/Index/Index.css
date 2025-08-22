@@ -1,0 +1,105 @@
+:root{
+  --card:#3b4353;                 
+  --panel:#0c1220;                
+  --border:rgba(255,255,255,.08);
+  --text:#e6ecff;
+  --text-dim:#a7b2c8;
+  --accent:#5bb3ff;
+}
+
+.home{
+  display: flex;
+  flex-direction: column;   
+  align-items: center;      
+  gap: 20px;  
+  padding: 30px 80px 20px;
+}
+
+
+.welcome-card{
+  width:100%;
+  background: var(--card);
+  color: var(--text);
+  border:1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px 22px;
+  box-shadow: 0 10px 34px rgba(0,0,0,.25);
+}
+
+.welcome-head{
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 16px; margin-bottom: 20px;
+}
+
+.welcome-title{
+  display:flex; align-items:center; gap: 15px; flex-wrap:wrap;
+}
+
+.welcome-title h1{
+  margin:0; font-size: 26px; font-weight: 750;
+}
+
+.muted{ color: var(--text-dim); font-weight: 600; }
+
+.badge{
+  font-size: 12px; font-weight: 700; color:#cfe2ff;
+  padding: 6px 10px; border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+.pill-btn{
+  height: 36px; padding: 0 14px;
+  border-radius: 12px; border:1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  color: var(--text); font-weight: 600;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+}
+
+.pill-btn:hover{
+  transform: translateY(-1px);
+  border-color: rgba(91,179,255,.45);
+  box-shadow: 0 0 0 3px rgba(91,179,255,.35);
+}
+
+.panel{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 16px;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.02);
+}
+
+.tasks{
+  width:100%;
+  background: var(--card);
+  color: var(--text);
+  border:1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px 22px;
+  box-shadow: 0 10px 34px rgba(0,0,0,.25);
+}
+
+.tasks-head{
+  display:flex;
+  align-items:center; 
+  justify-content:space-between;
+  padding: 0 6px 10px;
+}
+
+.tasks-title{ margin:0; font-size:24px; font-weight:700; }
+
+.tasks-hint{ color:#a7b2c8; opacity:.7; font-size:14px; }
+
+.tasks-grid{
+  display:grid;
+  gap:16px;
+}
+
+.tasks-group{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(320px, 1fr));
+  gap: 16px;
+}
