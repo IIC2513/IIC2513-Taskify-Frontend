@@ -1,12 +1,51 @@
-# React + Vite
+# Taskify (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una pequeña app de tareas con un look oscuro y limpio, hecha con **React + Vite**.
 
-Currently, two official plugins are available:
+## 🚀 Scripts útiles
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Para correr el proyecto
 
-## Expanding the ESLint configuration
+```bash
+yarn dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Para agregar react-router-dom
+
+```bash
+yarn add react-router-dom
+```
+
+---
+
+## 🗂 Contenido
+
+El proyecto incluye **tres vistas**:
+
+### 🏠 Vista principal (Home)
+- Muestra las **tareas** de un **usuario específico**.
+- Permite **mostrar/ocultar** las tareas **completadas**.
+- Presenta la **experiencia** del usuario en una **barra de progreso** (ProgressBar).
+- Muestra el **nivel** del usuario con un badge.
+
+### 🔐 Login
+- Vista simple con **formulario**.
+- Inputs: **username** y **password**.
+
+### 📝 Register
+- Vista simple con **formulario**.
+- Inputs: **username** y **password**.
+
+---
+
+## ✨ Tecnologías / Hooks
+- **React + Vite**
+- **React Router** (navegación entre vistas)
+- **Hooks**: `useState`, `useEffect`, `useRef`
+
+---
+
+## 🧭 Navegación
+- `/` → **Home**
+- `/login` → **Login**
+- `/register` → **Register**
