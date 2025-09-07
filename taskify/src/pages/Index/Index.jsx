@@ -1,39 +1,93 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"
 import ProgressBar from "../../components/Progressbar/Progressbar";
 import TaskItem from "../../components/Task/Task";
+import TaskForm from "../../components/Task/TaskForm";
 import "./Index.css";
-
-// ===== Usuarios (mock) =====
-const USERS = [
-  { id: 1, username: "Pepita", password: "123456", level: 3, experience: 65 },
-  { id: 2, username: "Pepito", password: "abcdef", level: 2, experience: 20 },
-];
-
-const CURRENT_USER_ID = 1;
+import axios from "axios";
 
 export default function Index() {
   const [showCompleted, setShowCompleted] = useState(true);
+  const [tasks, setTasks] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(() => {
+  const stored = localStorage.getItem("user");
+  return stored ? JSON.parse(stored) : null;
+});
 
-  const currentUser =
-    USERS.find((u) => u.id === CURRENT_USER_ID) ?? USERS[0];
+  // Carga las tareas del usuario actual
+  useEffect(() => {
+    if (!currentUser) {
+      // Si no hay sesión -> volver al login
+      navigate("/login");
+      return;
+    }
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/tasks/${currentUser.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        // Mapea las tareas para cambiar "ACTIVE" a "pending"
+        const tasksWithPending = response.data.map(task => {
+        if (task.status === "ACTIVE") {
+          return { ...task, status: "pending" };
+        }
+        return task;
+        });
+
+        setTasks(tasksWithPending);
+        console.log("Tareas cargadas:", response.data);
+      } catch (error) {
+        console.error("Error al cargar tareas:", error);
+      }
+    };
+
+    fetchTasks();
+  }, [currentUser, navigate]);
 
 
-  // ===== Tareas (mock) =====
-  const TASKS = [
-    { id: 1, userId: 1, title: "Configurar proyecto con Vite", description: "Crear app React, limpiar boilerplate, añadir rutas básicas.", status: "pending" },
-    { id: 2, userId: 1, title: "Diseñar barra de progreso", description: "XP sube al completar tareas. Nivel 3 → 4 al 100%.", status: "pending" },
-    { id: 3, userId: 1, title: "Crear tarjetas de tarea", description: "Title, descripción, acciones editar/eliminar/completar.", status: "pending" },
-    { id: 4, userId: 1, title: "Instalar dependencias", description: "React Router, axios, íconos, tipografías.", status: "done" },
-    { id: 5, userId: 1, title: "Definir paleta y estilos", description: "Colores, espaciados, radio bordes, sombras.", status: "done" },
-    { id: 6, userId: 1, title: "Implementar navegación", description: "Rutas para tareas, login, registro (no funcional).", status: "pending" },
-    { id: 7, userId: 1, title: "Añadir barra de progreso", description: "Mostrar progreso del nivel en la página principal.", status: "done" },
-    { id: 8, userId: 2, title: "Crear navbar", description: "Enlazar a tareas, login, registro (no funcional).", status: "done" }, // otro user
-    { id: 9, userId: 1, title: "Estilizar tarjetas de tarea", description: "Diseñar tarjetas con acciones y estados.", status: "pending" },
-  ];
+if (!currentUser) return null; 
+  // Añade una nueva tarea
+const handleAddTask = async (newTask) => {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/tasks`,
+      newTask
+    );
 
-  const userTasks = TASKS.filter(t => t.userId === currentUser.id);
-  const pending   = userTasks.filter(t => t.status === "pending");
-  const completed = userTasks.filter(t => t.status === "done");
+    const taskWithPending =
+      response.data.status === "ACTIVE"
+        ? { ...response.data, status: "pending" }
+        : response.data;
+
+    // Esto actualiza el estado inmediatamente, sin refrescar
+    setTasks((prev) => [...prev, taskWithPending]);
+  } catch (error) {
+    console.error("Error al agregar tarea:", error);
+  }
+};
+
+// Actualiza tarea en el estado local
+const handleUpdateTask = (updatedTask) => {
+  setTasks((prevTasks) =>
+    prevTasks.map((t) => (t.id === updatedTask.id ? { ...t, ...updatedTask } : t))
+  );
+};
+
+// Elimina tarea en el estado local
+const handleDeleteTask = (taskId) => {
+  setTasks((prevTasks) => prevTasks.filter((t) => t.id !== taskId));
+};
+
+  const pending = tasks.filter(t => t.status === "pending");
+  const completed = tasks.filter(t => t.status === "COMPLETED");
 
   return (
     <>
@@ -46,6 +100,10 @@ export default function Index() {
               </h1>
               <span className="badge">Nivel {currentUser.level}</span>
             </div>
+
+            <button className="fab-btn" onClick={() => setIsModalOpen(true)}>
+              Crear tarea
+            </button>
 
             <button
               type="button"
@@ -66,7 +124,6 @@ export default function Index() {
         <section className="tasks">
           <div className="tasks-head">
             <h2 className="tasks-title">Tus tareas</h2>
-            <span className="tasks-hint">(borrador no funcional)</span>
           </div>
 
           <div className="tasks-grid">
@@ -76,9 +133,13 @@ export default function Index() {
                 pending.map(t => (
                   <TaskItem
                     key={t.id}
+                    id={t.id}                    
                     title={t.title}
-                    desc={t.description}          
-                    done={t.status === "done"}      
+                    desc={t.description}
+                    done={t.status === "COMPLETED"}
+                    onChange={(updatedTask) => handleUpdateTask(updatedTask)}
+                    onDelete={(id) => handleDeleteTask(id)}
+                    userId={currentUser.id}    
                   />
                 ))
               ) : (
@@ -94,9 +155,12 @@ export default function Index() {
                     {completed.map(t => (
                       <TaskItem
                         key={t.id}
+                        id={t.id}
                         title={t.title}
                         desc={t.description}
-                        done={t.status === "done"}
+                        done={t.status === "COMPLETED"}
+                        onDelete={(id) => handleDeleteTask(id)}
+                        userId={currentUser.id}
                       />
                     ))}
                   </div>
@@ -107,14 +171,15 @@ export default function Index() {
             )}
           </div>
         </section>
+
+        {/* Modal */}
+        <TaskForm
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddTask}
+        currentUserId={currentUser.id}
+        />
       </main>
     </>
   );
 }
-
-{/* 
-import "./Index.css";
-export default function Index() {
-  return <>hola</>;
-}
-*/}

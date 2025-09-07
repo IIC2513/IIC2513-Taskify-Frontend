@@ -1,18 +1,38 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import axios from "axios";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/login`,
+        form
+      );
+
+      // Guardar token y datos en localStorage
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      // Redirigir a Home
+      navigate("/");
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Usuario o contraseña incorrecta");
+    }
   };
 
   return (
@@ -59,6 +79,8 @@ export default function Login() {
               required
             />
           </label>
+          {error && <p className="error-msg">{error}</p>}
+          <p>¿No tienes sesión? <a href="/register" class="register-link">¡Regístrate!</a></p>
 
           <button type="submit" className="login-btn">Entrar</button>
         </form>
@@ -66,4 +88,3 @@ export default function Login() {
     </main>
   );
 }
-

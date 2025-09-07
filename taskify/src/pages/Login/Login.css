@@ -93,3 +93,11 @@
   text-decoration: underline;
 }
 
+.register-link {
+  color: #1e90ff; /* azul, puedes cambiar por el color que quieras */
+  text-decoration: none; /* opcional, para quitar el subrayado */
+}
+
+.register-link:hover {
+  text-decoration: underline; /* opcional, efecto al pasar el mouse */
+}
