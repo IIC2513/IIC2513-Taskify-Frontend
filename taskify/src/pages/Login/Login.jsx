@@ -80,7 +80,7 @@ export default function Login() {
             />
           </label>
           {error && <p className="error-msg">{error}</p>}
-          <p>¿No tienes sesión? <a href="/register" class="register-link">¡Regístrate!</a></p>
+          <p>¿No tienes sesión? <a href="/register" className="register-link">¡Regístrate!</a></p>
 
           <button type="submit" className="login-btn">Entrar</button>
         </form>
