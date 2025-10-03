@@ -4,17 +4,15 @@ import ProgressBar from "../../components/Progressbar/Progressbar";
 import TaskItem from "../../components/Task/Task";
 import TaskForm from "../../components/Task/TaskForm";
 import "./Index.css";
-import axios from "axios";
+import api from "../../services/api";
+import { useAuth } from '../../auth/AuthContext';
 
 export default function Index() {
   const [showCompleted, setShowCompleted] = useState(true);
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(() => {
-  const stored = localStorage.getItem("user");
-  return stored ? JSON.parse(stored) : null;
-});
+  const { user: currentUser } = useAuth();
 
   // Carga las tareas del usuario actual
   useEffect(() => {
@@ -25,14 +23,7 @@ export default function Index() {
     }
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/tasks/${currentUser.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const response = await api.get(`/api/tasks/${currentUser.id}`);
 
         // Mapea las tareas para cambiar "ACTIVE" a "pending"
         const tasksWithPending = response.data.map(task => {
@@ -57,10 +48,7 @@ if (!currentUser) return null;
   // Añade una nueva tarea
 const handleAddTask = async (newTask) => {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/api/tasks`,
-      newTask
-    );
+    const response = await api.post(`/api/tasks`, newTask);
 
     const taskWithPending =
       response.data.status === "ACTIVE"

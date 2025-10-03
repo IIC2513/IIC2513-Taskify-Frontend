@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import axios from "axios";
+import { useAuth } from '../../auth/AuthContext';
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -18,17 +19,9 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/login`,
-        form
-      );
-
-      // Guardar token y datos en localStorage
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-
-      // Redirigir a Home
-      navigate("/");
+  const response = await login(form);
+  // login() ya guarda token y user en localStorage y context
+  navigate("/");
     } catch (err) {
       console.error("Login error:", err);
       setError("Usuario o contraseña incorrecta");

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./Task.css";
-import axios from "axios";
+import api from "../../services/api";
 import ConfirmModal from "../Task/ConfirmModal";
 
 export default function Tarea({
@@ -76,13 +76,10 @@ export default function Tarea({
       // Optimistic UI: actualizar localmente primero
       setIsDone(true);
 
-      const response = await axios.patch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/tasks/${id}`,
-        {
-          status: "COMPLETED",
-          userId, 
-        }
-      );
+      const response = await api.patch(`/api/tasks/${id}`, {
+        status: "COMPLETED",
+        userId,
+      });
 
       console.log("Tarea completada:", response.data);
 
@@ -98,9 +95,7 @@ export default function Tarea({
   const handleDelete = async () => {
   try {
 
-    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/tasks/${id}`, {
-      data: { userId } // DELETE con body necesita 'data' en axios
-    });
+    await api.delete(`/api/tasks/${id}`, { data: { userId } });
 
     // Propagar al padre para que actualice la lista
     onDelete(id);

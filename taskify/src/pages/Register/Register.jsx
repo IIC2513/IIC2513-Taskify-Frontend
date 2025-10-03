@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
-import axios from "axios";
+import { useAuth } from '../../auth/AuthContext';
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -20,17 +21,13 @@ export default function Register() {
     setError("");
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/register`,
-        form
-      );
-
-      // Guardar token y datos en localStorage
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-
-      // Redirigir a Home
-      navigate("/");
+        const response = await register(form);
+        // register() intentará guardar token/user si están disponibles
+        if (window.confirm('Registro exitoso. ¿Quieres ir al inicio? Pulsa Aceptar para navegar.')) {
+          navigate('/');
+        } else {
+          console.log('Registro completado, staying on register page for inspection.');
+        }
     } catch (err) {
       console.error("Login error:", err);
       setError("No se pudo registrar correctamente");
